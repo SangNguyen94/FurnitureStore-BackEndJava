@@ -70,19 +70,7 @@ public class StripeService {
 //        }
 //    }
 
-    public static void alwaysRun() {
-        port(4242);
-
-        Dotenv dotenv = Dotenv.load();
-
-        checkEnv();
-
-        Stripe.apiKey = "sk_test_51IrOE7IKHZePqhnOAJKub4w1t7lPuDK0uNYzVmcctHup9VxzlC7UHIX4RQtJOBSpyRIQdN1F7k6GS7c73PopxPdZ008zKoSnAL";
-        Stripe.setAppInfo(
-            "stripe-samples/checkout-one-time-payments",
-            "0.0.1",
-            "https://github.com/stripe-samples/checkout-one-time-payments"
-        );
+    
 
 
 //        staticFiles.externalLocation(
@@ -94,39 +82,13 @@ public class StripeService {
 
        
 
-        post("/webhook", (request, response) -> {
-            String payload = request.body();
-            String sigHeader = request.headers("Stripe-Signature");
-            String endpointSecret = System.getenv("STRIPE_WEBHOOK_SECRET");
-
-            Event event = null;
-
-            try {
-                event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
-            } catch (SignatureVerificationException e) {
-                // Invalid signature
-                response.status(400);
-                return "";
-            }
-
-            switch (event.getType()) {
-                case "checkout.session.completed":
-                    System.out.println("Payment succeeded!");
-                    response.status(200);
-                    return "";
-                default:
-                    response.status(200);
-                    return "";
-            }
-        });
-    }
-
+      
     @GET
     @Path("/config")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getConfig() throws StripeException {
-        Dotenv dotenv = Dotenv.load();
-        checkEnv();
+       
+
         Stripe.apiKey = "sk_test_51IrOE7IKHZePqhnOAJKub4w1t7lPuDK0uNYzVmcctHup9VxzlC7UHIX4RQtJOBSpyRIQdN1F7k6GS7c73PopxPdZ008zKoSnAL";
         Stripe.setAppInfo(
             "stripe-samples/checkout-one-time-payments",
@@ -156,8 +118,7 @@ public class StripeService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCS(@QueryParam("sessionId") String sessionId) throws StripeException {
-        Dotenv dotenv = Dotenv.load();
-        checkEnv();
+   
         Stripe.apiKey = "sk_test_51IrOE7IKHZePqhnOAJKub4w1t7lPuDK0uNYzVmcctHup9VxzlC7UHIX4RQtJOBSpyRIQdN1F7k6GS7c73PopxPdZ008zKoSnAL";
         Stripe.setAppInfo(
             "stripe-samples/checkout-one-time-payments",
@@ -183,8 +144,7 @@ public class StripeService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postCS(String jsonObject1) throws StripeException {
-        Dotenv dotenv = Dotenv.load();
-        checkEnv();
+      
         Stripe.apiKey ="sk_test_51IrOE7IKHZePqhnOAJKub4w1t7lPuDK0uNYzVmcctHup9VxzlC7UHIX4RQtJOBSpyRIQdN1F7k6GS7c73PopxPdZ008zKoSnAL";
         Stripe.setAppInfo(
             "stripe-samples/checkout-one-time-payments",
@@ -202,7 +162,7 @@ public class StripeService {
 
             //PostBody postBody = gson.fromJson(jsonObject, PostBody.class);
             System.out.println(jsonObject.toString());
-            String domainUrl = "http://localhost:3000";
+            String domainUrl = "http://furniture-store-sang.herokuapp.com";
             List<Long> quantity = jsonObject.getQuantity();
          //   List<PriceData> priceData= jsonObject.getPriceData();
             List<String> image=jsonObject.getImage();
@@ -275,11 +235,5 @@ public class StripeService {
             return  Response.ok().entity(new Gson().toJson(responseData)).build();
     }
     
-    public static void checkEnv() {
-        Dotenv dotenv = Dotenv.load();
-        String price = "price_1IrQwuIKHZePqhnOxm90ekE4";
-        if(price == "price_12345" || price == "" || price == null) {
-          System.out.println("You must set a Price ID in the .env file. Please see the README.");
-        }
-    }
+   
 }
